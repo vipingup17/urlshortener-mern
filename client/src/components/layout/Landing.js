@@ -7,7 +7,7 @@ class Landing extends Component {
       <div style={{ height: "75vh" }} className="container valign-wrapper">
         <div className="row">
           <div className="col s12 center-align">
-            <h4>URL Shortener (Info Edge Assignment)
+            <h4>URL Shortener
             </h4>
             <p className="flow-text grey-text text-darken-1">
             </p>

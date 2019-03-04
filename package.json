@@ -22,6 +22,8 @@
     "mongoose": "^5.3.11",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
+    "shortid": "^2.2.14",
+    "valid-url": "^1.0.9",
     "validator": "^10.9.0"
   }
 }

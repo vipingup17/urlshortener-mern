@@ -9,13 +9,15 @@ const bodyParser = require("body-parser");
 module.exports = app => {
   app.use( bodyParser.json() );       // to support JSON-encoded bodies
 
-  app.get("/api/item/:code", async (req, res) => {
+  app.get("/:code", async (req, res) => {
     const urlCode = req.params.code;
     console.log(urlCode);
     const item = await UrlShorten.findOne({ urlCode: urlCode });
     if (item) {
+      console.log(item);
       return res.redirect(item.originalUrl);
     } else {
+      console.log(item);
       return res.json("item not found");
     }
   });
@@ -30,7 +32,7 @@ module.exports = app => {
         if (item) {
           res.status(200).json(item);
         } else {
-          shortUrl = shortBaseUrl + "/" + urlCode;
+          shortUrl = shortBaseUrl + '/' + urlCode;
           const item = new UrlShorten({
             originalUrl,
             shortUrl,

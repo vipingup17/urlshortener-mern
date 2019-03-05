@@ -9,37 +9,68 @@ class Dashboard extends Component {
     this.props.logoutUser();
   };
 
-  render() {
-    const { user } = this.props.auth;
+    constructor() {
+      super();
+      this.handleSubmit = this.handleSubmit.bind(this);
+      this.state = {
+        urls: "",
+        status: false
+      }
+    }
 
-    return (
-      <div style={{ height: "75vh" }} className="container valign-wrapper">
-        <div className="row">
-          <div className="landing-copy col s12 center-align">
-            <h4>
-              <b>Hey there,</b> {user.name.split(" ")[0]}
-              <p className="flow-text grey-text text-darken-1">
-                You are logged into a full-stack{" "}
-                <span style={{ fontFamily: "monospace" }}>MERN</span> app 👏
-              </p>
-            </h4>
-            <button
-              style={{
-                width: "150px",
-                borderRadius: "3px",
-                letterSpacing: "1.5px",
-                marginTop: "1rem"
-              }}
-              onClick={this.onLogoutClick}
-              className="btn btn-large waves-effect waves-light hoverable blue accent-3"
-            >
-              Logout
-            </button>
+    handleSubmit(event) {
+      event.preventDefault();
+      // const data = new FormData(event.target);
+
+      const data = new URLSearchParams();
+      for (const pair of new FormData(event.target)) {
+          data.append(pair[0], pair[1]);
+      }
+      fetch('/api/item', {
+        method: 'POST',
+        body: data,
+      }).then(response => response.json())
+        .then(response => {
+          console.log(response);
+          {this.setState({ urls: this.state.urls + response.shortUrl + " " })};
+        });
+    }
+
+    render() {
+      const style = this.state.status ? {} : {display:'none'};
+      return (
+        <div className="container">
+          <div style={{ marginTop: "4rem" }} className="row">
+            <div className="col s8 offset-s2">
+                <button
+                  style={{
+                    width: "150px",
+                    borderRadius: "3px",
+                    letterSpacing: "1.5px",
+                    marginTop: "1rem"
+                  }}
+                  onClick={this.onLogoutClick}
+                  className="btn waves-effect waves-light hoverable blue accent-3"
+                >
+                  Logout
+                </button>
+                <form onSubmit={this.handleSubmit}>
+
+                  <label htmlFor="shorten"><h4>Enter url to shorten</h4></label>
+                  <input id="shorten" name="originalUrl" type="text" />
+
+                  <input id="short" name="shortBaseUrl" type="text" value="http://localhost:5000" style={style} />
+
+                  <button className="btn">Shorten!</button>
+                </form>
+
+                <p>Your urls - Please send GET requests to the below urls to go to the original urls</p>
+                <p className="urls">{ this.state.urls }</p>
+            </div>
           </div>
         </div>
-      </div>
-    );
-  }
+      );
+    }
 }
 
 Dashboard.propTypes = {
